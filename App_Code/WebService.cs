@@ -6,12 +6,13 @@ using System.Web.Services;
 using System.Data.SqlClient;
 using System.Data;
 using System.Web.Script.Services;
+using System.Web.Script.Serialization;
 
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
-[WebService(Description = "Lab2", Namespace = XmlNS)]
+[WebService(Description = "Lab3", Namespace = XmlNS)]
 public class WebService : System.Web.Services.WebService
 {
-    public const string XmlNS = "http://asmx.lab2.com/";
+    public const string XmlNS = "http://asmx.lab3.com/";
 
     public WebService()
     {
@@ -57,6 +58,38 @@ public class WebService : System.Web.Services.WebService
     }
 
     [WebMethod]
+    [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
+    public void IsMethodExistsName(string serviceName, string methodName)
+    {
+        Context.Response.Clear();
+        Context.Response.ContentType = "application/json";
+        
+        using (SqlConnection connection = new SqlConnection("Data Source=DESKTOP-D85MEBM;Initial Catalog=service;Integrated Security=True;Pooling=False"))
+        {
+            string queryString = "SELECT COUNT(1) FROM service inner join methods on service.id = methods.serviceid WHERE service.name = \'" + serviceName + "\' AND methods.methodname = \'" + methodName +"\';";
+            SqlCommand command = new SqlCommand(queryString, connection);
+            try
+            {
+                command.Connection.Open();
+
+
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                Context.Response.Clear();
+                Context.Response.ContentType = "application/json";
+                HelloWorldData data = new HelloWorldData();
+                data.Message = (Int32)command.ExecuteScalar() == 1;
+                Context.Response.Write(js.Serialize(data));             
+                return;
+            }
+            catch
+            {
+                return;
+            }
+        }
+    }
+
+    [WebMethod]
+    [ScriptMethod(UseHttpGet = true, XmlSerializeString = true)]
     public DataTable GetServiceList()
     {
         using (SqlConnection connection = new SqlConnection("Data Source=DESKTOP-D85MEBM;Initial Catalog=service;Integrated Security=True;Pooling=False"))
@@ -74,7 +107,7 @@ public class WebService : System.Web.Services.WebService
             {
                 command.Connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
-
+                
                 while (reader.Read())
                 {    
                     column = new Dictionary<string, string>();
@@ -92,7 +125,6 @@ public class WebService : System.Web.Services.WebService
                 return null;
             }
         }
-        return null;
     }
 
     [WebMethod]
@@ -136,6 +168,10 @@ public class WebService : System.Web.Services.WebService
                 return null;
             }
         }
-        return null;
     }
+}
+
+class HelloWorldData
+{
+    public Boolean Message;
 }

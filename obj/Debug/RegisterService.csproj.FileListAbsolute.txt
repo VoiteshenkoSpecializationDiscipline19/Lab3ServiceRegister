@@ -4,3 +4,4 @@ D:\3-course\5-term\ds\ASP.NET-136eb0a9b686419521623f0a0bc519e6f53e9315\lab2\WcfS
 D:\3-course\5-term\ds\ASP.NET-136eb0a9b686419521623f0a0bc519e6f53e9315\lab2\WcfService2\obj\Debug\RegisterService.csproj.CoreCompileInputs.cache
 D:\3-course\5-term\ds\ASP.NET-136eb0a9b686419521623f0a0bc519e6f53e9315\lab2\WcfService2\obj\Debug\WcfService2.dll
 D:\3-course\5-term\ds\ASP.NET-136eb0a9b686419521623f0a0bc519e6f53e9315\lab2\WcfService2\obj\Debug\WcfService2.pdb
+D:\3-course\5-term\ds\ASP.NET-136eb0a9b686419521623f0a0bc519e6f53e9315\lab2\WcfService2\obj\Debug\RegisterService.csprojAssemblyReference.cache
