@@ -30,6 +30,11 @@ CREATE TABLE service (
 
 ALTER TABLE service ADD CONSTRAINT service_pk PRIMARY KEY ( id );
 
+INSERT INTO service(id, name, address)
+VALUES (1, "Money", "api/money");
+
+INSERT INTO methods(methodid, serviceid, methodname)
+VALUES (1, 1, "Add");
 
 
 -- Oracle SQL Developer Data Modeler Summary Report: 
