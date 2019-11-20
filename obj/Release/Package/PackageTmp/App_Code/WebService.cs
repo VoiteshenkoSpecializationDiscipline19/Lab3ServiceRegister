@@ -8,6 +8,8 @@ using System.Data;
 using System.Web.Script.Services;
 using System.Web.Script.Serialization;
 using MySql.Data.MySqlClient;
+using System.Xml;
+using Newtonsoft.Json;
 
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
 [WebService(Description = "Lab3", Namespace = XmlNS)]
@@ -93,44 +95,36 @@ public class WebService : System.Web.Services.WebService
         }
     }
 
-    [WebMethod]
+    /*[WebMethod]
     [ScriptMethod(UseHttpGet = true, XmlSerializeString = true)]
-    public DataTable GetServiceList()
+    public String GetServiceList()
     {
         using (MySqlConnection connection = new MySqlConnection(connectionString))
         {
-            string queryString = "SELECT * FROM service;";
+            string queryString = "SELECT service.id, service.name, service.address, methods.methodname FROM service inner join methods on service.id = methods.serviceid;";
             MySqlCommand command = new MySqlCommand(queryString, connection);
-            Dictionary<string, string> column;
-
-            DataTable dt = new DataTable();
-            dt.Columns.Add("id", typeof(int));
-            dt.Columns.Add("name", typeof(string));
-            dt.Columns.Add("address", typeof(string));
-            dt.TableName = "Services";
+            DataTable dataTable = new DataTable();
             try
             {
-                command.Connection.Open();
-                MySqlDataReader reader = command.ExecuteReader();
-                
-                while (reader.Read())
-                {    
-                    column = new Dictionary<string, string>();
+                MySqlCommand cmd = new MySqlCommand(queryString, connection);
+                connection.Open();
 
-                    column["id"] = reader["id"].ToString();
-                    column["name"] = reader["name"].ToString();
-                    column["address"] = reader["address"].ToString();
-                    dt.Rows.Add(column);
-                }
-                reader.Close();
-                return dt;
+                
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                
+                da.Fill(dataTable);
+                connection.Close();
+                da.Dispose();
+                string json = JsonConvert.SerializeObject(dataTable.DataSet, Newtonsoft.Json.Formatting.Indented).ToString();
+                return json;
             }
-            catch
+            catch (Exception ex)
             {
-                return null;
+                return ex.Message;
             }
         }
-    }
+        return null;
+    }*/
 
     [WebMethod]
     [ScriptMethod(UseHttpGet = true, XmlSerializeString = true)]
@@ -164,7 +158,7 @@ public class WebService : System.Web.Services.WebService
 
                 foreach (Dictionary<String, String> row in rows)
                 {
-                    result += string.Join(";", row.Select(x => x.Key + ":" + x.Value).ToArray()) + "\n";
+                    result += string.Join(";", row.Select(x => x.Key + ":" + x.Value).ToArray()) + ":\n\n:";
                 }
 
                 return result;
