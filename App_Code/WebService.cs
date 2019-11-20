@@ -95,37 +95,7 @@ public class WebService : System.Web.Services.WebService
         }
     }
 
-    /*[WebMethod]
-    [ScriptMethod(UseHttpGet = true, XmlSerializeString = true)]
-    public String GetServiceList()
-    {
-        using (MySqlConnection connection = new MySqlConnection(connectionString))
-        {
-            string queryString = "SELECT service.id, service.name, service.address, methods.methodname FROM service inner join methods on service.id = methods.serviceid;";
-            MySqlCommand command = new MySqlCommand(queryString, connection);
-            DataTable dataTable = new DataTable();
-            try
-            {
-                MySqlCommand cmd = new MySqlCommand(queryString, connection);
-                connection.Open();
-
-                
-                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
-                
-                da.Fill(dataTable);
-                connection.Close();
-                da.Dispose();
-                string json = JsonConvert.SerializeObject(dataTable.DataSet, Newtonsoft.Json.Formatting.Indented).ToString();
-                return json;
-            }
-            catch (Exception ex)
-            {
-                return ex.Message;
-            }
-        }
-        return null;
-    }*/
-
+  
     [WebMethod]
     [ScriptMethod(UseHttpGet = true, XmlSerializeString = true)]
     public String GetServiceListString()
@@ -166,7 +136,6 @@ public class WebService : System.Web.Services.WebService
             catch(Exception ex)
             {
                 return ex.Message;
-                //return null;
             }
         }
     }
@@ -176,3 +145,5 @@ class HelloWorldData
 {
     public Boolean Message;
 }
+
+
